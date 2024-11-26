@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cheque Entry Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .game-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 500px;
+            text-align: center;
+        }
+        .cheque {
+            border: 2px solid #333;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+        .cheque-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        #amountInput {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        #stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .timer {
+            display: none;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+        }
+        #managerPassword {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .cheque-date {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Cheque Entry Game</h1>
+        <div id="cheque" class="cheque">
+            <div class="cheque-date" id="chequeDate">-</div>
+            <div class="timer" id="timer">00:00</div>
+            <div class="cheque-details">
+                <div>Bank: <span id="bankName">-</span></div>
+                <div>MICR: <span id="micrCode">-</span></div>
+            </div>
+            <div>Amount: LKR <span id="chequeAmount">-</span></div>
+        </div>
+        <input 
+            type="number" 
+            step="0.01" 
+            id="amountInput" 
+            placeholder="Enter Cheque Amount" 
+            onkeypress="handleAmountEntry(event)"
+        >
+        <div id="stats">
+            <div>Total Cheques: <span id="totalCheques">0</span></div>
+            <div>Total Amount: LKR <span id="totalAmount">0.00</span></div>
+            <div>Accuracy: <span id="accuracy">100%</span></div>
+        </div>
+    </div>
+
+    <!-- Manager Password Modal -->
+    <div id="managerModal" class="modal">
+        <div class="modal-content">
+            <h2>High Value Cheque</h2>
+            <p>Cheque amount exceeds LKR 900,000</p>
+            <p>Manager Authorization Required</p>
+            <input 
+                type="password" 
+                id="managerPassword" 
+                placeholder="Enter Manager Password"
+            >
+            <button onclick="verifyManagerPassword()">Authorize</button>
+            <button onclick="closeManagerModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const banks = [
+            ' Bank of Ceylon', 'Commercial Bank', 'Hatton National Bank', 
+            'Sampath Bank', 'People\'s Bank', 'National Savings Bank'
+        ];
+
+        // Manager password for high-value cheques
+        const MANAGER_PASSWORD = 'admin123';
+
+        let startTime = Date.now();
+        let totalCheques = 0;
+        let totalAmount = 0;
+        let correctEntries = 0;
+        let elapsedTime = 0;
+        let currentChequeAmount = 0;
+
+        function generateMICR() {
+            return Math.floor(100000 + Math.random() * 900000);
+        }
+
+        function generateRandomDate() {
+            const start = new Date(2020, 0, 1); // Start date: January 1, 2020
+            const end = new Date(); // End date: today
+            const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return date.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+        }
+
+        function generateCheque() {
+            const bankName = banks[Math.floor(Math.random() * banks.length)];
+            const micrCode = generateMICR();
+            const chequeDate = generateRandomDate();
+            
+            // Sophisticated amount generation
+            let amount;
+            const randomizer = Math.random();
+
+            if (randomizer < 0.7) {
+                // 70% chance: 1,000 to 50,000
+                amount = Math.random() * 49000 + 1000;
+            } else if (randomizer < 0.9) {
+                // 20% chance: 50,000 to 250,000
+                amount = Math.random() * 200000 + 50000;
+            } else if (randomizer < 0.98) {
+                // 8% chance: 250,000 to 900,000
+                amount = Math.random() * 650000 + 250000;
+            } else {
+                // 2% chance: 900,000 to 10,000,000
+                amount = Math.random() * 9100000 + 900000;
+            }
+            
+            // Decide whether to include cents (25% chance)
+            const includeCents = Math.random() < 0.25;
+            
+            // Format amount
+            const formattedAmount = includeCents 
+                ? amount.toFixed(2) 
+                : Math.floor(amount).toString();
+
+            currentChequeAmount = parseFloat(formattedAmount);
+
+            document.getElementById('bankName').textContent = bankName;
+            document.getElementById('micrCode').textContent = micrCode;
+            document.getElementById('chequeAmount').textContent = formattedAmount;
+            document.getElementById('chequeDate').textContent = chequeDate; // Set the random date
+            document.getElementById('amountInput').value = '';
+        }
+
+        function updateTimer() {
+            const currentTime = Date.now();
+            elapsedTime = Math.floor((currentTime - startTime) / 1000);
+        }
+
+        function handleAmountEntry(event) {
+            if (event.key === 'Enter') {
+                const enteredAmount = parseFloat(document.getElementById('amountInput').value);
+
+                // Check if cheque exceeds 900,000
+                if (currentChequeAmount > 900000) {
+                    openManagerModal();
+                    return;
+                }
+
+                processChequeEntry(enteredAmount);
+            }
+        }
+
+        function processChequeEntry(enteredAmount) {
+            totalCheques++;
+            if (Math.abs(enteredAmount - currentChequeAmount) < 0.01) {
+                correctEntries++;
+                // Reward: 10% of cheque amount
+                totalAmount += currentChequeAmount * 1.1;
+            }
+
+            updateStats();
+            generateCheque();
+        }
+
+        function openManagerModal() {
+            document.getElementById('managerModal').style.display = 'block';
+        }
+
+        function closeManagerModal() {
+            document.getElementById('managerModal').style.display = 'none';
+        }
+
+        function verifyManagerPassword() {
+            const passwordInput = document.getElementById('managerPassword');
+            
+            if (passwordInput.value === MANAGER_PASSWORD) {
+                // Password correct, process the high-value cheque
+                const enteredAmount = parseFloat(document.getElementById('amountInput').value);
+                processChequeEntry(enteredAmount);
+                closeManagerModal();
+                passwordInput.value = ''; // Clear password
+            } else {
+                alert('Incorrect Manager Password');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalCheques').textContent = totalCheques;
+            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+            document.getElementById('accuracy').textContent = 
+                `${Math.floor((correctEntries / totalCheques) * 100)}%`;
+        }
+
+        // Start game setup
+        setInterval(updateTimer, 1000);
+        generateCheque();
+    </script>
+</body>
+</html>
