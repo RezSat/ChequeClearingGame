@@ -94,17 +94,18 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        const texts = ["sameera", "3116", "3118", "malli"];
         const shapes = [];
         const shapeCount = 100;
 
         function createShape() {
-            const size = Math.random() * 20 + 5;
+            const size = Math.random() * 20 + 10; // Increased minimum size for better visibility
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
             const speedX = (Math.random() - 0.5) * 2;
             const speedY = (Math.random() - 0.5) * 2;
-            const char = Math.random() < 0.5 ? String.fromCharCode(65 + Math.floor(Math.random() * 26)) : Math.floor(Math.random() * 10);
-            shapes.push({ x, y, speedX, speedY, size, char });
+            const text = texts[Math.floor(Math.random() * texts.length)];
+            shapes.push({ x, y, speedX, speedY, size, text });
         }
 
         for (let i = 0; i < shapeCount; i++) {
@@ -123,7 +124,7 @@
 
                 ctx.font = `${shape.size}px Arial`;
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                ctx.fillText(shape.char, shape.x, shape.y);
+                ctx.fillText(shape.text, shape.x, shape.y);
             });
 
             requestAnimationFrame(update);
