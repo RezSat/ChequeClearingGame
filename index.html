@@ -74,12 +74,20 @@
             padding: 10px;
             margin: 10px 0;
         }
+        .cheque-date {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
         <h1>Cheque Entry Game</h1>
         <div id="cheque" class="cheque">
+            <div class="cheque-date" id="chequeDate">-</div>
             <div class="timer" id="timer">00:00</div>
             <div class="cheque-details">
                 <div>Bank: <span id="bankName">-</span></div>
@@ -119,7 +127,7 @@
 
     <script>
         const banks = [
-            'Bank of Ceylon', 'Commercial Bank', 'Hatton National Bank', 
+            ' Bank of Ceylon', 'Commercial Bank', 'Hatton National Bank', 
             'Sampath Bank', 'People\'s Bank', 'National Savings Bank'
         ];
 
@@ -137,9 +145,17 @@
             return Math.floor(100000 + Math.random() * 900000);
         }
 
+        function generateRandomDate() {
+            const start = new Date(2020, 0, 1); // Start date: January 1, 2020
+            const end = new Date(); // End date: today
+            const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return date.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+        }
+
         function generateCheque() {
             const bankName = banks[Math.floor(Math.random() * banks.length)];
             const micrCode = generateMICR();
+            const chequeDate = generateRandomDate();
             
             // Sophisticated amount generation
             let amount;
@@ -172,6 +188,7 @@
             document.getElementById('bankName').textContent = bankName;
             document.getElementById('micrCode').textContent = micrCode;
             document.getElementById('chequeAmount').textContent = formattedAmount;
+            document.getElementById('chequeDate').textContent = chequeDate; // Set the random date
             document.getElementById('amountInput').value = '';
         }
 
@@ -230,7 +247,7 @@
 
         function updateStats() {
             document.getElementById('totalCheques').textContent = totalCheques;
-            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+            document.getElementById('totalAmount').text Content = totalAmount.toFixed(2);
             document.getElementById('accuracy').textContent = 
                 `${Math.floor((correctEntries / totalCheques) * 100)}%`;
         }
@@ -240,4 +257,4 @@
         generateCheque();
     </script>
 </body>
-  </html>
+</html>
