@@ -90,6 +90,9 @@
     <script>
         const canvas = document.getElementById('backgroundCanvas');
         const ctx = canvas.getContext('2d');
+        document.getElementById('initiate-button').addEventListener('click', function() {
+            window.location.href = 'task.html'; // This will navigate to tasks.html
+        });
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;

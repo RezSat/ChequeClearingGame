@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repair Batches</title>
+    <style>
+        body {
+            background-color: #FFF9C4; /* Pale yellow background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+            cursor: pointer; /* Change cursor to pointer for clickable effect */
+        }
+
+        th {
+            background-color: #f0e68c; /* Slightly darker yellow for header */
+        }
+
+        tr:hover {
+            background-color: #f5f5f5; /* Light grey on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            th, td {
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+            th {
+                position: relative;
+                padding-left: 50%;
+            }
+
+            th::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: 50%;
+                padding-left: 10px;
+                font-weight: bold;
+            }
+
+            td {
+                padding-left: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>Repair Batches</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th data-label="Batch Number">Batch Number</th>
+            <th data-label="Number of Cheques">Number of Cheques</th>
+            <th data-label="Entering User Name">Entering User Name</th>
+            <th data-label="Total Amount">Total Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Batch 001</td>
+            <td>5</td>
+            <td>John Doe</td>
+            <td>$500</td>
+        </tr>
+        <tr>
+            <td>Batch 002</td>
+            <td>3</td>
+            <td>Jane Smith</td>
+            <td>$300</td>
+        </tr>
+        <tr>
+            <td>Batch 003</td>
+            <td>10</td>
+            <td>Mike Johnson</td>
+            <td>$1000</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    // Add event listeners to each header for click functionality
+    document.querySelectorAll('th').forEach(th => {
+        th.addEventListener('click', () => {
+            console.log(`Column clicked: ${th.innerText}`);
+        });
+    });
+</script>
+
+</body>
+</html>
