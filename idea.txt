@@ -1,0 +1,50 @@
+so here is the idea, Simulator of the day of the clearing department
+both have sinhla and enlgish subs
+Initial window:
+    button saying "Initiate Day Start Function"
+    background moving things like "3116", "3118", "Sam33ra", "Malli"
+    topic: Cooparate Branch, clearing department
+
+press the button select the task:
+
+    tas: -> Enter Chques
+            -> select character
+        -> Scan Cheques
+         -> select character ( here it's called the Scanning Deyyo/Scanning god)
+
+characters have different strengths and weaknesses
+available characters:
+    -> Yehan
+    -> Yuresh
+    -> Randira
+
+Auditors:
+    Sam33ra Sir (S sir)
+    Nandani Miss (N miss)
+
+NPC: Dilanka Miss ( D miss )
+
+Unit Head: Sandareka ( Doing nothing that involve much, signing some cheques and basically not involing much in it)
+
+enter cheques: option with a character, repair batches screen and then basically the same as image master
+there will be some batches that auto generating and some of them will be uppdated automatically while you enter the selected batch
+of yours
+
+print option
+then put into an Auditor
+
+when putting it to an audior if the batch balances that audior has to audit is greater than the other and that is for N miss then 
+a blaming message will be shown.
+
+while auditing, there will be more batches, that we can enter, and if we did nothing when there are more than 3 batches in the list
+dilanka miss will shout "Malli batch gahanna nikn inne"
+
+we can select a either month end or normal day only difference is that at month end there are god damn lot of batches,
+
+when all batches are finished, the day will end and the audit will be done.
+then the day end Function is done.
+
+message: Even if you survie this very very very poorly build simulation you could never hope to surive the real thing itself, and that'S
+what i love about it. *Thanks for playing*
+
+this kind of the basic outline of the simulation i want to build, i need a web based solution that is also mobile friendly what you think
